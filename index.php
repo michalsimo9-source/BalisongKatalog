@@ -112,7 +112,10 @@
 									</div>
 								</section>
 
-						</div>
-					</div>
+                        </div>
+                    </div>
 
-<?php include_once 'parts/footer.php'; ?>	
+                <?php include_once 'parts/sidebar.php'; ?>
+
+            </div> 
+            <?php include_once 'parts/footer.php'; ?>	

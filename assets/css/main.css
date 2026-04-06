@@ -2271,3 +2271,15 @@ button,
     border-top: 0;
     margin-top: 0;
     padding-top: 0; }
+
+.vysledok-balisong {
+    background: #f4f4f4;
+    padding: 20px;
+    border-left: 5px solid #f56a6a;
+    margin-bottom: 30px;
+}
+
+.vysledok-balisong h3 {
+    color: #f56a6a;
+    margin-top: 0;
+}
