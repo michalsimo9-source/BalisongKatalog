@@ -6,6 +6,17 @@
   $database = new Database();
   $db = $database->getConnection();
   $balisong = new Balisong($db);
+
+  if (isset($_GET['delete_id'])) {
+    $balisong->id = $_GET['delete_id'];
+    
+    if ($balisong->delete()) {
+        header("Location: index.php");
+        exit();
+    } else {
+        echo "<div style='background: red; color: white; padding: 10px; text-align: center;'>Chyba pri mazaní záznamu.</div>";
+    }
+}
 ?>
 
 <section id="banner">
@@ -86,6 +97,7 @@
                         <p><?php echo htmlspecialchars($poznamka); ?></p>
                         <ul class="actions">
                             <li><a href="#" class="button">Detail</a></li>
+							<li><a href="index.php?delete_id=<?php echo $id; ?>" class="button primary" style="background-color: #f56a6a !important; box-shadow: inset 0 0 0 2px #f56a6a !important; color: white !important;" onclick="return confirm('Naozaj chcete zmazať tento balisong?');">Zmazať</a></li>
                         </ul>
                     </article>
                     <?php
