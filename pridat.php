@@ -1,4 +1,12 @@
-<?php include_once 'parts/header.php'; ?>	
+<?php 
+include_once 'parts/header.php'; 
+require_once 'classes/Database.php';
+require_once 'classes/Balisong.php';
+
+$database = new Database();
+$db = $database->getConnection();
+$balisong = new Balisong($db);
+?>
 
 <section>
     <header class="major">
@@ -7,16 +15,22 @@
 
     <?php
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        $nazov = htmlspecialchars($_POST['nazov']);
-        $znacka = htmlspecialchars($_POST['znacka']);
-        $typ = $_POST['typ'];
+        $balisong->nazov = $_POST['nazov'];
+        $balisong->znacka = $_POST['znacka'];
+        $balisong->typ = $_POST['typ'];
+        $balisong->poznamka = $_POST['sprava'];
 
-        echo "<div class='vysledok-balisong'>";
-        echo "<h3>Nôž bol úspešne zaevidovaný!</h3>";
-        echo "<p><strong>Názov:</strong> $nazov <br>";
-        echo "<strong>Značka:</strong> $znacka <br>";
-        echo "<strong>Typ:</strong> $typ</p>";
-        echo "</div>";
+        if($balisong->create()) {
+            echo "<div style='background: #d4edda; color: #155724; padding: 15px; border-radius: 5px; margin-bottom: 20px;'>";
+            echo "<h3>Úspech!</h3>";
+            echo "<p>Balisong <strong>" . htmlspecialchars($balisong->nazov) . "</strong> bol uložený do databázy.</p>";
+            echo "</div>";
+        } else {
+            echo "<div style='background: #f8d7da; color: #721c24; padding: 15px; border-radius: 5px; margin-bottom: 20px;'>";
+            echo "<h3>Chyba!</h3>";
+            echo "<p>Nepodarilo sa uložiť dáta do databázy.</p>";
+            echo "</div>";
+        }
     }
     ?>
 
@@ -29,7 +43,7 @@
                 <input type="text" name="znacka" id="znacka" value="" placeholder="Značka (napr. Squid Industries)" required />
             </div>
             <div class="col-12">
-                <select name="typ" id="typ">
+                <select name="typ" id="typ" required>
                     <option value="">- Vyber typ čepele -</option>
                     <option value="Trainer">Trainer (Tupá)</option>
                     <option value="Live Blade">Live Blade (Ostrá)</option>
@@ -48,10 +62,6 @@
     </form>
 </section>
 
-                        </div>
-                    </div>
+</div> </div> <?php include_once 'parts/sidebar.php'; ?>
 
-                <?php include_once 'parts/sidebar.php'; ?>
-
-            </div> 
-            <?php include_once 'parts/footer.php'; ?>
+</div> <?php include_once 'parts/footer.php'; ?>
