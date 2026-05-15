@@ -60,4 +60,52 @@ class Balisong {
         }
         return false;
     }
+
+    public function readOne() {
+        $query = "SELECT id, nazov, znacka, typ, poznamka 
+                  FROM " . $this->table_name . " 
+                  WHERE id = :id 
+                  LIMIT 0,1";
+
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(":id", $this->id);
+        $stmt->execute();
+
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($row) {
+            $this->nazov = $row['nazov'];
+            $this->znacka = $row['znacka'];
+            $this->typ = $row['typ'];
+            $this->poznamka = $row['poznamka'];
+            return true;
+        }
+        return false;
+    }
+
+    public function update() {
+        $query = "UPDATE " . $this->table_name . " 
+                  SET nazov = :nazov, znacka = :znacka, typ = :typ, poznamka = :poznamka 
+                  WHERE id = :id";
+
+        $stmt = $this->conn->prepare($query);
+
+        $this->nazov = htmlspecialchars(strip_tags($this->nazov));
+        $this->znacka = htmlspecialchars(strip_tags($this->znacka));
+        $this->typ = htmlspecialchars(strip_tags($this->typ));
+        $this->poznamka = htmlspecialchars(strip_tags($this->poznamka));
+        $this->id = htmlspecialchars(strip_tags($this->id));
+
+        // Naviazanie parametrov
+        $stmt->bindParam(":nazov", $this->nazov);
+        $stmt->bindParam(":znacka", $this->znacka);
+        $stmt->bindParam(":typ", $this->typ);
+        $stmt->bindParam(":poznamka", $this->poznamka);
+        $stmt->bindParam(":id", $this->id);
+
+        if($stmt->execute()) {
+            return true;
+        }
+        return false;
+    }
 }

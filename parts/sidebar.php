@@ -9,7 +9,7 @@
 
                             <nav id="menu">
                                 <header class="major">
-                                    h2>Menu</h2>
+                                    <h2>Menu</h2>
                                 </header>
                                 <ul>
                                     <li><a href="index.php">Domov</a></li>
