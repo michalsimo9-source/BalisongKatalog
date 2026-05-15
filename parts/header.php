@@ -7,17 +7,13 @@
 		<link rel="stylesheet" href="assets/css/main.css" />
 	</head>
 	<body class="is-preload">
-
-		<!-- Wrapper -->
+ 
 			<div id="wrapper">
-
-				<!-- Main -->
 					<div id="main">
 						<div class="inner">
 
-							<!-- Header -->
 								<header id="header">
-									<a href="index.html" class="logo"><strong>Balisong</strong> Projekt</a>
+									<a href="index.php" class="logo"><strong>Balisong</strong> Projekt</a>
 									<ul class="icons">
 										<li><a href="#" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li>
 										<li><a href="#" class="icon brands fa-facebook-f"><span class="label">Facebook</span></a></li>
