@@ -1,11 +1,11 @@
-<?php include_once 'parts/header.php'; ?>	
-
 <?php 
+  include_once 'parts/header.php';
   require_once 'classes/Database.php';
-  $db = new Database();
-  if($db->getConnection()) {
-      echo "";
-  }
+  require_once 'classes/Balisong.php';
+
+  $database = new Database();
+  $db = $database->getConnection();
+  $balisong = new Balisong($db);
 ?>
 
 <section id="banner">
@@ -63,33 +63,37 @@
 
 <section>
         <header class="major">
-            <h2>Najobľúbenejšie kúsky</h2>
+            <h2>Moja aktuálna zbierka</h2>
         </header>
         <div class="posts">
-            <article>
-                <a href="#" class="image"><img src="images/pic01.jpg" alt="Böker Plus" /></a>
-                <h3>Böker Plus Balisong</h3>
-                <p>Nemecký dizajn v kombinácii s praktickosťou. Skvelý kúsok pre každodenné nosenie aj ľahké flippovanie.</p>
-                <ul class="actions">
-                    <li><a href="#" class="button">Viac info</a></li>
-                </ul>
-            </article>
-            <article>
-                <a href="#" class="image"><img src="images/pic02.jpg" alt="Squid Industries" /></a>
-                <h3>Squid Industries Kraken</h3>
-                <p>Jeden z najikonickejších trainerov a ostrých nožov na svete, známy svojím nezameniteľným zvukom.</p>
-                <ul class="actions">
-                    <li><a href="#" class="button">Viac info</a></li>
-                </ul>
-            </article>
-            <article>
-                <a href="#" class="image"><img src="images/pic03.jpg" alt="FOX Knives" /></a>
-                <h3>FOX Knives Skeleton</h3>
-                <p>Talianska precíznosť. Odľahčený skelet rukoväte umožňuje extrémne rýchlu manipuláciu.</p>
-                <ul class="actions">
-                    <li><a href="#" class="button">Viac info</a></li>
-                </ul>
-            </article>
+            <?php
+
+            $stmt = $balisong->read();
+            $num = $stmt->rowCount();
+
+            if($num > 0) {
+                while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                    extract($row);
+                    ?>
+                    <article>
+                        <a href="#" class="image"><img src="images/pic01.jpg" alt="Balisong" /></a>
+                        <h3><?php echo htmlspecialchars($nazov); ?></h3>
+                        <p>
+                            <strong>Značka:</strong> <?php echo htmlspecialchars($znacka); ?><br>
+                            <strong>Typ:</strong> <?php echo htmlspecialchars($typ); ?><br>
+                            <strong>Pridané:</strong> <?php echo date('d.m.Y H:i', strtotime($datum_pridania)); ?>
+                        </p>
+                        <p><?php echo htmlspecialchars($poznamka); ?></p>
+                        <ul class="actions">
+                            <li><a href="#" class="button">Detail</a></li>
+                        </ul>
+                    </article>
+                    <?php
+                }
+            } else {
+                echo "<p>V databáze sa nenachádzajú žiadne balisongy. Pridaj nejaký cez formulár!</p>";
+            }
+            ?>
         </div>
     </section>
 

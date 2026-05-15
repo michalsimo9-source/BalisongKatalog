@@ -35,5 +35,15 @@ class Balisong {
         }
         return false;
     }
+
+    public function read() {
+        $query = "SELECT id, nazov, znacka, typ, poznamka, datum_pridania 
+                  FROM " . $this->table_name . " 
+                  ORDER BY datum_pridania DESC";
+
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+
+        return $stmt;
+    }
 }
-?>
