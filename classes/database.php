@@ -2,8 +2,8 @@
 class Database {
     private $host = "localhost";
     private $db_name = "balisong_db";
-    private $username = "root"; // Predvolené v XAMPP
-    private $password = "";     // Predvolené v XAMPP (prázdne)
+    private $username = "root"; 
+    private $password = "";     
     public $conn;
 
     // Metóda na získanie pripojenia
@@ -16,7 +16,6 @@ class Database {
                 $this->username,
                 $this->password
             );
-            // Nastavenie kódovania a nahlasovania chýb
             $this->conn->exec("set names utf8mb4");
             $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         } catch(PDOException $exception) {
