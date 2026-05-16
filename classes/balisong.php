@@ -36,10 +36,33 @@ class Balisong {
         return false;
     }
 
-    public function read() {
-        $query = "SELECT id, nazov, znacka, typ, poznamka, datum_pridania 
+    public function read($type = null) {
+        if ($type !== null) {
+            $query = "SELECT id, nazov, znacka, typ, poznamka, datum_pridania 
+                      FROM " . $this->table_name . " 
+                      WHERE typ = :typ
+                      ORDER BY datum_pridania DESC";
+            
+            $stmt = $this->conn->prepare($query);
+            $type = htmlspecialchars(strip_tags($type));
+            $stmt->bindParam(":typ", $type);
+        } else {
+            $query = "SELECT id, nazov, znacka, typ, poznamka, datum_pridania 
+                      FROM " . $this->table_name . " 
+                      ORDER BY datum_pridania DESC";
+            
+            $stmt = $this->conn->prepare($query);
+        }
+
+        $stmt->execute();
+        return $stmt;
+    }
+
+    public function readLatest() {
+        $query = "SELECT id, nazov, znacka, typ, poznamka 
                   FROM " . $this->table_name . " 
-                  ORDER BY datum_pridania DESC";
+                  ORDER BY datum_pridania DESC 
+                  LIMIT 2";
 
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
@@ -51,10 +74,9 @@ class Balisong {
         $query = "DELETE FROM " . $this->table_name . " WHERE id = :id";
 
         $stmt = $this->conn->prepare($query);
-
         $this->id = htmlspecialchars(strip_tags($this->id));
-
         $stmt->bindParam(":id", $this->id);
+
         if($stmt->execute()) {
             return true;
         }
@@ -96,7 +118,6 @@ class Balisong {
         $this->poznamka = htmlspecialchars(strip_tags($this->poznamka));
         $this->id = htmlspecialchars(strip_tags($this->id));
 
-        // Naviazanie parametrov
         $stmt->bindParam(":nazov", $this->nazov);
         $stmt->bindParam(":znacka", $this->znacka);
         $stmt->bindParam(":typ", $this->typ);
@@ -109,3 +130,4 @@ class Balisong {
         return false;
     }
 }
+?>

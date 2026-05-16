@@ -79,7 +79,8 @@
         <div class="posts">
             <?php
 
-            $stmt = $balisong->read();
+            $filter = isset($_GET['filter_type']) ? $_GET['filter_type'] : null;
+            $stmt = $balisong->read($filter);
             $num = $stmt->rowCount();
 
             if($num > 0) {
