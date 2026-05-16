@@ -32,11 +32,11 @@
             </ul>
         </div>
         <span class="image object">
-            <img src="images/pic10.jpg" alt="Balisong flippovanie" />
+            <img src="images/obrazok1.jpg" alt="Balisong flippovanie" />
         </span>
     </section>
 
-	<section>
+    <section>
         <header class="major">
             <h2>Prečo balisongy?</h2>
         </header>
@@ -86,9 +86,14 @@
             if($num > 0) {
                 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     extract($row);
+                    
+                    $image_path = "images/noz_" . $id . ".jpg";
+                    if (!file_exists($image_path)) {
+                        $image_path = "images/default.jpg";
+                    }
                     ?>
                     <article>
-                        <a href="#" class="image"><img src="images/pic01.jpg" alt="Balisong" /></a>
+                        <a href="#" class="image"><img src="<?php echo $image_path; ?>" alt="<?php echo htmlspecialchars($nazov); ?>" /></a>
                         <h3><?php echo htmlspecialchars($nazov); ?></h3>
                         <p>
                             <strong>Značka:</strong> <?php echo htmlspecialchars($znacka); ?><br>
@@ -98,7 +103,7 @@
                         <p><?php echo htmlspecialchars($poznamka); ?></p>
                         <ul class="actions">
                             <li><a href="upravit.php?id=<?php echo $id; ?>" class="button">Upraviť</a></li>
-							<li><a href="index.php?delete_id=<?php echo $id; ?>" class="button primary" style="background-color: #f56a6a !important; box-shadow: inset 0 0 0 2px #f56a6a !important; color: white !important;" onclick="return confirm('Naozaj chcete zmazať tento balisong?');">Zmazať</a></li>
+                            <li><a href="index.php?delete_id=<?php echo $id; ?>" class="button primary" style="background-color: #f56a6a !important; box-shadow: inset 0 0 0 2px #f56a6a !important; color: white !important;" onclick="return confirm('Naozaj chcete zmazať tento balisong?');">Zmazať</a></li>
                         </ul>
                     </article>
                     <?php

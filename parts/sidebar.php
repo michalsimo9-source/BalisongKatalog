@@ -35,13 +35,18 @@
 
                 if($num_latest > 0) {
                     while ($row_latest = $stmt_latest->fetch(PDO::FETCH_ASSOC)) {
+                        
+                        $sidebar_image_path = "images/noz_" . $row_latest['id'] . ".jpg";
+                        if (!file_exists($sidebar_image_path)) {
+                            $sidebar_image_path = "images/default.jpg";
+                        }
                         ?>
                         <article>
-                            <a href="#" class="image"><img src="images/pic07.jpg" alt="Balisong" /></a>
+                            <a href="#" class="image"><img src="<?php echo $sidebar_image_path; ?>" alt="<?php echo htmlspecialchars($row_latest['nazov']); ?>" /></a>
                             <p>
                                 <strong><?php echo htmlspecialchars($row_latest['znacka'] . ' ' . $row_latest['nazov']); ?></strong>
                                 (<?php echo htmlspecialchars($row_latest['typ']); ?>)<br>
-                                <?php
+                                <?php 
                                     $text = htmlspecialchars($row_latest['poznamka']);
                                     echo (strlen($text) > 100) ? substr($text, 0, 100) . '...' : $text; 
                                 ?>
