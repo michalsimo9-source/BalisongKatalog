@@ -129,5 +129,18 @@ class Balisong {
         }
         return false;
     }
+
+    public function getStats() {
+    $query = "SELECT 
+                COUNT(*) as celkovo,
+                SUM(CASE WHEN typ = 'Live Blade' THEN 1 ELSE 0 END) as ostre,
+                SUM(CASE WHEN typ = 'Trainer' THEN 1 ELSE 0 END) as trenery
+              FROM " . $this->table_name;
+
+    $stmt = $this->conn->prepare($query);
+    $stmt->execute();
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+    
 }
 ?>

@@ -6,12 +6,6 @@ if (session_status() === PHP_SESSION_NONE) {
 <div id="sidebar">
     <div class="inner">
 
-        <section id="search" class="alt">
-            <form method="post" action="#">
-                <input type="text" name="query" id="query" placeholder="Search" />
-            </form>
-        </section>
-
         <nav id="menu">
             <header class="major">
                 <h2>Menu</h2>
@@ -35,6 +29,24 @@ if (session_status() === PHP_SESSION_NONE) {
                 </li>
             </ul>
         </nav>
+
+        <section>
+            <header class="major">
+                <h2>Prehľad zbierky</h2>
+            </header>
+            <?php 
+            if (isset($balisong)) {
+                $stats = $balisong->getStats();
+                ?>
+                <ul class="alt" style="margin-bottom: 0;">
+                    <li>Celkový počet nožov: <strong><?php echo (int)$stats['celkovo']; ?> ks</strong></li>
+                    <li>Ostré čepele (Live): <strong><?php echo (int)$stats['ostre']; ?> ks</strong></li>
+                    <li>Tréningové (Trainer): <strong><?php echo (int)$stats['trenery']; ?> ks</strong></li>
+                </ul>
+                <?php
+            }
+            ?>
+        </section>
 
         <section>
             <header class="major">
