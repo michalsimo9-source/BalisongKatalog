@@ -1,4 +1,8 @@
 <?php 
+  if (session_status() === PHP_SESSION_NONE) { 
+      session_start(); 
+  }
+
   include_once 'parts/header.php';
   require_once 'classes/Database.php';
   require_once 'classes/Balisong.php';
@@ -8,6 +12,10 @@
   $balisong = new Balisong($db);
 
   if (isset($_GET['delete_id'])) {
+    if (!isset($_SESSION['user_id'])) {
+        header("Location: login.php");
+        exit();
+    }
     $balisong->id = $_GET['delete_id'];
     
     if ($balisong->delete()) {
@@ -27,9 +35,12 @@
                 <p>Moja osobná zbierka a sprievodca svetom motýlikov</p>
             </header>
             <p>Balisong, u nás známy skôr ako nožík motýlik, nie je len rezný nástroj. Pre mnohých z nás je to o zručnosti, trpezlivosti a komunite. Na tejto stránke nájdeš moju aktuálnu zbierku, technické parametre obľúbených kúskov a formulár, cez ktorý môžem evidovať nové prírastky do mojej výbavy.</p>
-            <ul class="actions">
-                <li><a href="pridat.php" class="button big">Pridať do zbierky</a></li>
-            </ul>
+            
+            <?php if (isset($_SESSION['user_id'])): ?>
+                <ul class="actions">
+                    <li><a href="pridat.php" class="button big">Pridať do zbierky</a></li>
+                </ul>
+            <?php endif; ?>
         </div>
         <span class="image object">
             <img src="images/obrazok1.jpg" alt="Balisong flippovanie" />
@@ -101,10 +112,13 @@
                             <strong>Pridané:</strong> <?php echo date('d.m.Y H:i', strtotime($datum_pridania)); ?>
                         </p>
                         <p><?php echo htmlspecialchars($poznamka); ?></p>
-                        <ul class="actions">
-                            <li><a href="upravit.php?id=<?php echo $id; ?>" class="button">Upraviť</a></li>
-                            <li><a href="index.php?delete_id=<?php echo $id; ?>" class="button primary" style="background-color: #f56a6a !important; box-shadow: inset 0 0 0 2px #f56a6a !important; color: white !important;" onclick="return confirm('Naozaj chcete zmazať tento balisong?');">Zmazať</a></li>
-                        </ul>
+                        
+                        <?php if (isset($_SESSION['user_id'])): ?>
+                            <ul class="actions">
+                                <li><a href="upravit.php?id=<?php echo $id; ?>" class="button">Upraviť</a></li>
+                                <li><a href="index.php?delete_id=<?php echo $id; ?>" class="button primary" style="background-color: #f56a6a !important; box-shadow: inset 0 0 0 2px #f56a6a !important; color: white !important;" onclick="return confirm('Naozaj chcete zmazať tento balisong?');">Zmazať</a></li>
+                            </ul>
+                        <?php endif; ?>
                     </article>
                     <?php
                 }

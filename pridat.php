@@ -1,4 +1,14 @@
 <?php 
+
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit();
+}
+
 include_once 'parts/header.php'; 
 require_once 'classes/Database.php';
 require_once 'classes/Balisong.php';

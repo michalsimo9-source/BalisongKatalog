@@ -1,3 +1,8 @@
+<?php 
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+?>
 <div id="sidebar">
     <div class="inner">
 
@@ -13,7 +18,14 @@
             </header>
             <ul>
                 <li><a href="index.php">Domov (Prehľad zbierky)</a></li>
-                <li><a href="pridat.php">Pridať balisong (Formulár)</a></li>
+                
+                <?php if (isset($_SESSION['user_id'])): ?>
+                    <li><a href="pridat.php">Pridať balisong (Formulár)</a></li>
+                    <li><a href="logout.php" style="color: #f56a6a !important; font-weight: bold;">Odhlásiť sa (<?php echo htmlspecialchars($_SESSION['username']); ?>)</a></li>
+                <?php else: ?>
+                    <li><a href="login.php">Prihlásenie (Admin)</a></li>
+                <?php endif; ?>
+
                 <li>
                     <span class="opener">Filtrovať zbierku</span>
                     <ul>
@@ -30,32 +42,34 @@
             </header>
             <div class="mini-posts">
                 <?php
-                $stmt_latest = $balisong->readLatest();
-                $num_latest = $stmt_latest->rowCount();
+                if (isset($balisong)) {
+                    $stmt_latest = $balisong->readLatest();
+                    $num_latest = $stmt_latest->rowCount();
 
-                if($num_latest > 0) {
-                    while ($row_latest = $stmt_latest->fetch(PDO::FETCH_ASSOC)) {
-                        
-                        $sidebar_image_path = "images/noz_" . $row_latest['id'] . ".jpg";
-                        if (!file_exists($sidebar_image_path)) {
-                            $sidebar_image_path = "images/default.jpg";
+                    if($num_latest > 0) {
+                        while ($row_latest = $stmt_latest->fetch(PDO::FETCH_ASSOC)) {
+                            
+                            $sidebar_image_path = "images/noz_" . $row_latest['id'] . ".jpg";
+                            if (!file_exists($sidebar_image_path)) {
+                                $sidebar_image_path = "images/default.jpg";
+                            }
+                            ?>
+                            <article>
+                                <a href="#" class="image"><img src="<?php echo $sidebar_image_path; ?>" alt="<?php echo htmlspecialchars($row_latest['nazov']); ?>" /></a>
+                                <p>
+                                    <strong><?php echo htmlspecialchars($row_latest['znacka'] . ' ' . $row_latest['nazov']); ?></strong>
+                                    (<?php echo htmlspecialchars($row_latest['typ']); ?>)<br>
+                                    <?php 
+                                        $text = htmlspecialchars($row_latest['poznamka']);
+                                        echo (strlen($text) > 100) ? substr($text, 0, 100) . '...' : $text; 
+                                    ?>
+                                </p>
+                            </article>
+                            <?php
                         }
-                        ?>
-                        <article>
-                            <a href="#" class="image"><img src="<?php echo $sidebar_image_path; ?>" alt="<?php echo htmlspecialchars($row_latest['nazov']); ?>" /></a>
-                            <p>
-                                <strong><?php echo htmlspecialchars($row_latest['znacka'] . ' ' . $row_latest['nazov']); ?></strong>
-                                (<?php echo htmlspecialchars($row_latest['typ']); ?>)<br>
-                                <?php 
-                                    $text = htmlspecialchars($row_latest['poznamka']);
-                                    echo (strlen($text) > 100) ? substr($text, 0, 100) . '...' : $text; 
-                                ?>
-                            </p>
-                        </article>
-                        <?php
+                    } else {
+                        echo "<p>Žiadne nože v evidencii.</p>";
                     }
-                } else {
-                    echo "<p>Žiadne nože v evidencii.</p>";
                 }
                 ?>
             </div>
